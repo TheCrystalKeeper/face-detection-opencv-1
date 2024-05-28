@@ -1,19 +1,8 @@
 import cv2
 import os
 
-# Get the current working directory (where the script is located)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# Specify the image file name
-image_filename = 'youvegotsoul4.png'  # Change this to the actual image file name
-
-# Create the full path to the image file
-image_path = os.path.join(current_dir, image_filename)
-
 # Load the image from file
-image = cv2.imread('youvegotsoul4.png')
-
-# Check if the image was successfully loaded
+image = cv2.imread(image_filename)
 if image is None:
     print("Error: Could not load image.")
 else:
