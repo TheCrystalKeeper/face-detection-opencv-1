@@ -16,13 +16,13 @@ if users_input == '1':
     # filter out directories, keeping only files
     files = [f for f in files_and_dirs if  (not os.path.isfile(os.path.join(current_dir, f))) or imghdr.what(f) in ['png', 'jpg', 'jpeg']]
 
-    print("Choose a file. Pick one in the current working directory, or specify an absolute path1:")
+    print("Choose a file. Pick one in the current working directory, or specify an absolute path1:\n===============================================")
     for file in files:
         if os.path.isfile(os.path.join(current_dir, file)):
             print(" - " +  file)
         else:
             print(" * " + file)
-    image_filename = input("Enter filename here: ")
+    image_filename = input("=============================================== \nEnter filename here: ")
 
     # go to default image
     if image_filename == '':
@@ -53,4 +53,35 @@ if users_input == '1':
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 elif users_input == '2':
-    print("unfinished")
+    print("hi my dear")
+    cap = cv2.VideoCapture(1)
+    haar_cascade_face = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Could not read frame.")
+            break
+
+        #cv2.imshow("Frame", frame)
+        frame2 = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+
+        gray_image = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+
+        # detect faces in the grayscale image
+        faces_rects = haar_cascade_face.detectMultiScale(gray_image, scaleFactor=1.1, minNeighbors=5)
+        
+        # print the number of faces found
+        #print(f"Number of faces detected: {len(faces_rects)} \n\n")
+
+        # draw rectangles around the faces
+        for (x, y, w, h) in faces_rects:
+            cv2.rectangle(frame, (x, y), ((x+w)*4, (y+h)*4), (0, 255, 0), 2)
+        
+        cv2.imshow('Detected Faces', frame)
+        
+        key = cv2.waitKey(1)
+        if key == 27:
+            break
+    cap.release()
+    cv2.destroyAllWindows()
